@@ -1,8 +1,8 @@
 // Import necessary dependencies
-import './App.css'
-import { useEffect, useState } from "react"
+import './App.css';
+import { useEffect, useState } from 'react';
 const apiKey = import.meta.env.VITE_RAWG_API_KEY;
-const rawgURL ="https://api.rawg.io";
+const rawgURL = 'https://api.rawg.io';
 
 function App() {
   interface Game {
@@ -14,19 +14,19 @@ function App() {
   // const [games, setGames] = useState([])
   const [games, setGames] = useState<Array<Game>>([]);
 
-    // Define an async function to fetch data and update the state
-   const fetchData = async () => {
+  // Define an async function to fetch data and update the state
+  const fetchData = async () => {
     try {
-        // Make a GET request to the API endpoint
-        const response = await fetch(`${rawgURL}/api/games?key=${apiKey}&page=2`);
-        // Parse the response data as JSON
-        const json = await response.json();
-        // Update the state variable `games` with the fetched data
-        setGames(json.results);
-      } catch (error) {
-        // Log any errors that occur during the fetch
-        console.log("error", error);
-      }
+      // Make a GET request to the API endpoint
+      const response = await fetch(`${rawgURL}/api/games?key=${apiKey}&page=2`);
+      // Parse the response data as JSON
+      const json = await response.json();
+      // Update the state variable `games` with the fetched data
+      setGames(json.results);
+    } catch (error) {
+      // Log any errors that occur during the fetch
+      console.log('error', error);
+    }
   };
 
   // Use the `useEffect` hook to fetch data from rawg API when the component mounts
@@ -48,4 +48,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
