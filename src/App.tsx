@@ -1,35 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// Import necessary dependencies
+import './App.css';
+import { useEffect, useState } from 'react';
+const apiKey = process.env.VITE_RAWG_API_KEY;
+const rawgURL = 'https://api.rawg.io';
 
 function App() {
-  const [count, setCount] = useState(0)
+  interface Game {
+    background_image: string;
+    name: string;
+  }
 
+  // Initialize state variable named games and a function named setGames that can be used to update the value of games
+  // const [games, setGames] = useState([])
+  const [games, setGames] = useState<Array<Game>>([]);
+
+  // Define an async function to fetch data and update the state
+  const fetchData = async () => {
+    try {
+      // Make a GET request to the API endpoint
+      const response = await fetch(`${rawgURL}/api/games?key=${apiKey}&page=2`);
+      // Parse the response data as JSON
+      const json = await response.json();
+      // Update the state variable `games` with the fetched data
+      setGames(json.results);
+    } catch (error) {
+      // Log any errors that occur during the fetch
+      console.log('error', error);
+    }
+  };
+
+  // Use the `useEffect` hook to fetch data from rawg API when the component mounts
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Render the component
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="App">
+      {/* Map over the `games` array and render an <h1> and <img> element for each game */}
+      {games.map((game: Game) => (
+        <div key={game.name}>
+          <h2>{game.name}</h2>
+          <img src={game.background_image} alt={game.name} />
+        </div>
+      ))}
+      <button type="button">Add Game</button>
+    </div>
+  );
 }
 
-export default App
+export default App;
