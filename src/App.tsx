@@ -1,7 +1,7 @@
 // Import necessary dependencies
 import './App.css';
 import { useEffect, useState } from 'react';
-const apiKey = import.meta.env.VITE_RAWG_API_KEY;
+const apiKey = process.env.VITE_RAWG_API_KEY;
 const rawgURL = 'https://api.rawg.io';
 
 function App() {
@@ -40,10 +40,11 @@ function App() {
       {/* Map over the `games` array and render an <h1> and <img> element for each game */}
       {games.map((game: Game) => (
         <div key={game.name}>
-          <h1>{game.name}</h1>
+          <h2>{game.name}</h2>
           <img src={game.background_image} alt={game.name} />
         </div>
       ))}
+      <button type="button">Add Game</button>
     </div>
   );
 }
