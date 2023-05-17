@@ -1,14 +1,17 @@
 import React from 'react';
 
+import {FaSearch} from "react-icons/fa"
+import "./SearchBar.css"
+
 interface SearchBarProps {
-  search: string;
+  placeholder: string;
 }
 
-export const SearchBar: React.FunctionComponent<SearchBarProps> = ({ search }) => {
+export const SearchBar: React.FunctionComponent<SearchBarProps> = ({ placeholder }) => {
   return (
-    <div>
-      <input type="text" placeholder={search} />
-      <button>Search</button>
+    <div className="input-wrapper">
+      <input type="text" placeholder={placeholder} />
+      <FaSearch id="search-icon" />
     </div>
   );
 };

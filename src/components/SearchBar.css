@@ -1,0 +1,40 @@
+.input-wrapper {
+  background-color: rgb(104, 103, 103);
+  width: 100%;
+  border-radius: 30px;
+  height: 2.5 rem;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+}
+
+input {
+  background-color: transparent;
+  border: none;
+  height: 100%;
+  font-size: 1.25rem;
+  width: 100%;
+  margin-right: 5px;
+  color: black;
+}
+
+input::placeholder {
+  color: rgb(255, 255, 255);
+}
+
+input:hover::placeholder {
+  transition: color .5s ease-in-out;
+  color: gray;
+}
+
+input:focus {
+  outline: none;
+}
+
+.input-wrapper:hover {
+  transition: background .5s ease-in-out;
+  background-color: white;
+  cursor: pointer;
+}
+
+

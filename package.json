@@ -17,13 +17,13 @@
     "test:watch": "pnpm test watch",
     "test:coverage": "pnpm test coverage",
     "posttest": "npx http-server coverage/lcov-report"
-
   },
   "dependencies": {
     "eslint-config-prettier": "^8.8.0",
     "prettier": "^2.8.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-icons": "^4.8.0",
     "whatwg-fetch": "^3.6.2"
   },
   "devDependencies": {

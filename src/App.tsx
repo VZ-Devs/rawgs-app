@@ -1,6 +1,7 @@
 // Import necessary dependencies
 import './App.css';
 import { useEffect, useState } from 'react';
+import { SearchBar } from './components/SearchBar';
 const apiKey = process.env.VITE_RAWG_API_KEY;
 const rawgURL = 'https://api.rawg.io';
 
@@ -37,6 +38,9 @@ function App() {
   // Render the component
   return (
     <div className="App">
+      <div className="search-bar-container">
+        <SearchBar placeholder='Search through RAWG database'/>
+      </div>
       {/* Map over the `games` array and render an <h1> and <img> element for each game */}
       {games.map((game: Game) => (
         <div key={game.name}>
