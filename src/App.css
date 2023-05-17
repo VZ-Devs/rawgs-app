@@ -1,6 +1,9 @@
 body {
   background-color: black;
-  font-family: 'Noto Sans JP', sans-serif;
+}
+
+.pageTitle {
+  color: white;
 }
 
 /*
@@ -57,14 +60,10 @@ body {
   min-width: 200px;
 }
 
-.gameName {
-  color:White;
-}
-
 /* TESTING OUT CSS */
 
 :root {
-  --surface-color: #fff;
+  --surface-color: #222222;
   --curve: 40;
 }
 
@@ -74,7 +73,7 @@ body {
 
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   gap: 2rem;
   margin: 4rem 5vw;
   padding: 0;
@@ -151,7 +150,7 @@ body {
 .card__title {
   font-size: 1em;
   margin: 0 0 .3em;
-  color: black;
+  color: white;
 }
 
 .card__tagline {
@@ -159,19 +158,20 @@ body {
   margin: 1em 0;
   font-family: "MockFlowFont";  
   font-size: .8em; 
-  color: #D7BDCA;  
+  color: white;  
 }
 
 .card__status {
   font-size: .8em;
-  color: #D7BDCA;
+  color: white;
 }
 
 .card__description {
   padding: 0 2em 2em;
   margin: 0;
-  color: #D7BDCA;
-  font-family: "MockFlowFont";   
+  color: white;
+  font-family: "MockFlowFont";
+  
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;

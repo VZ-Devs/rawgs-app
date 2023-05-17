@@ -9,6 +9,8 @@ function App() {
   interface Game {
     background_image: string;
     name: string;
+    released: string;
+    platforms: string[];
   }
 
   // Initialize state variable named games and a function named setGames that can be used to update the value of games
@@ -55,22 +57,23 @@ function App() {
           onSearch={handleSearch}
         />
       </div>
+      <h1 className="pageTitle">Popular Games</h1>
       <ul className="cards">
         {/* Map over the `games` array and render an <h1> and <img> element for each game */}
         {(searchResults.length > 0 ? searchResults : games).map(
           (game: Game) => (
             <li key={game.name}>
-              <a href="google.com" className="card">
+              <a href="www.google.com" className="card">
                   <img src={game.background_image} alt={game.name} className="card__image"/>
                   <div className="card__overlay">
                     <div className="card__header">
                       <svg className="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>
                       <div className="card__header-text">
                         <h2 className="card__title">{game.name}</h2> 
-                        <span className="card__status">1 hour ago</span>
+                        <span className="card__status">(Platform icons)</span>
                       </div>
                     </div>
-                    <p className="card__description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, blanditiis?</p>
+                    <p className="card__description">Release date: {game.released}</p>
                   </div>
               </a>
             </li>

@@ -24,7 +24,7 @@ input::placeholder {
 
 input:hover::placeholder {
   transition: color .5s ease-in-out;
-  color: gray;
+  color: rgb(226, 226, 226);
 }
 
 input:focus {
