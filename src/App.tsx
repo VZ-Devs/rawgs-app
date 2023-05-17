@@ -14,6 +14,7 @@ function App() {
   // Initialize state variable named games and a function named setGames that can be used to update the value of games
   // const [games, setGames] = useState([])
   const [games, setGames] = useState<Array<Game>>([]);
+  const [searchResults, setSearchResults] = useState<Array<Game>>([]);
 
   // Define an async function to fetch data and update the state
   const fetchData = async () => {
@@ -35,19 +36,47 @@ function App() {
     fetchData();
   }, []);
 
+  const handleSearch = (search: string) => {
+    fetch(
+      `${rawgURL}/api/games?key=${apiKey}&search=${search}&search_exact=true`
+    )
+      .then((response) => response.json())
+      .then((json) => {
+        setSearchResults(json.results);
+      });
+  };
+
   // Render the component
   return (
     <div className="App">
       <div className="search-bar-container">
-        <SearchBar placeholder='Search through RAWG database'/>
+        <SearchBar
+          placeholder="Search through RAWG database"
+          onSearch={handleSearch}
+        />
       </div>
-      {/* Map over the `games` array and render an <h1> and <img> element for each game */}
-      {games.map((game: Game) => (
-        <div key={game.name}>
-          <h2>{game.name}</h2>
-          <img src={game.background_image} alt={game.name} />
-        </div>
-      ))}
+      <ul className="cards">
+        {/* Map over the `games` array and render an <h1> and <img> element for each game */}
+        {(searchResults.length > 0 ? searchResults : games).map(
+          (game: Game) => (
+            <li key={game.name}>
+              <a href="google.com" className="card">
+                  <img src={game.background_image} alt={game.name} className="card__image"/>
+                  <div className="card__overlay">
+                    <div className="card__header">
+                      <svg className="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>
+                      <div className="card__header-text">
+                        <h2 className="card__title">{game.name}</h2> 
+                        <span className="card__status">1 hour ago</span>
+                      </div>
+                    </div>
+                    <p className="card__description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, blanditiis?</p>
+                  </div>
+              </a>
+            </li>
+          )
+        )}
+      </ul>
       <button type="button">Add Game</button>
     </div>
   );
