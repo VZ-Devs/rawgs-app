@@ -72,7 +72,7 @@
 
 .read-the-docs {
   color: #888;
-} */ */
+} */
 
 .search-bar-container {
   width: 80%;
@@ -144,6 +144,10 @@
   width: max-content;
   word-wrap: break-all;
   margin-top: 0px;
+  color: white;
+  text-decoration-line: none;
+  font-size: 32px;
+  font-weight: bold;
 }
 
 .card-title::after {
@@ -151,17 +155,23 @@
   position: absolute;
   height: 3px;
   background-color: var(--clr-accent-400);
-  left: -3%;
+  left: -1%;
   bottom: -4px;
-  width: calc(107%);
+  width: calc(105%);
   transform: scaleX(0);
   transition: transform 500ms ease;
-  transform-origin: left; 
+  transform-origin: left;
 }
 
 .card:hover .card-title::after {
   transform: scaleX(1);
 }
+
+.card-title:hover {
+  color: rgb(136, 136, 136);
+  transition: color .3s ease-in-out;
+}
+
 
 .button {
   cursor: pointer;
@@ -173,13 +183,20 @@
   border-radius: 8px;
 }
 
+.button:hover {
+  transition: background-color .2s ease-in-out;
+  background-color: hsla(142, 90%, 61%, 0.658);
+}
+
 .card-container {
   height: 400px;
   overflow: hidden;
   transition: height 0.3s ease;
   border-radius: 8px;
-  z-index: -1;
+  z-index: -103;
 }
+
 .card-container:hover {
   height: 100%;
+  z-index: -100;
 } 

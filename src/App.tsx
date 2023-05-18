@@ -2,6 +2,7 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import { SearchBar } from './components/SearchBar';
+
 const apiKey = process.env.VITE_RAWG_API_KEY;
 const rawgURL = 'https://api.rawg.io';
 
@@ -11,6 +12,7 @@ function App() {
     background_image: string;
     name: string;
     released: string;
+    id: number;
   }
 
   // Initialize state variable named games and a function named setGames that can be used to update the value of games
@@ -50,6 +52,7 @@ function App() {
       });
   };
 
+
   // Render the component
   return (
     <div className="App">
@@ -65,7 +68,7 @@ function App() {
         <h1>All Games</h1>
         <h1>nav</h1>
       </div>
-
+{/* https://api.rawg.io/api/games/{id}?key=1578434786d2493e97e52a3b36a457b9  */}
       <div className="container">
         <div className="pageHeader">
           {(searchResults.length > 0 ? <h1 className="pageTitle">Search: {title}</h1> : 
@@ -75,14 +78,14 @@ function App() {
         <div className="cardGrid">
           {(searchResults.length > 0 ? searchResults : games).map(
             (game: Game) => (
-                <div className="card" key={game.name}>
+                <div className="card" key={game.name}> 
                   <img
                     src={game.background_image}
                     alt={game.name}
                     className="card-image"
-                  />
+                  /> 
                   <div className="card-content">
-                    <h2 className="card-title">{game.name}</h2>
+                    <a href={rawgURL + '/api/games/' + game.id + '?key=' + apiKey} className="card-title">{game.name}</a>
                     <p className="card-body">Release Date: {game.released}</p>
                     <p className="card-body">
                       Lorem ipsum dolor sit amet consectetur adipisicing elit.
