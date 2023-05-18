@@ -50,38 +50,41 @@ function App() {
   // Render the component
   return (
     <div className="App">
+      <div className="logo">logo</div>
       <div className="search-bar-container">
         <SearchBar
           placeholder="Search through RAWG database"
           onSearch={handleSearch}
         />
       </div>
-      <h1 className="pageTitle">Popular Games</h1>
-      <ul className="cards">
-        {/* Map over the `games` array and render an <h1> and <img> element for each game */}
-        {(searchResults.length > 0 ? searchResults : games).map(
-          (game: Game) => (
-            <li key={game.name}>
-              <a href="www.google.com" className="card">
-                  <img src={game.background_image} alt={game.name} className="card__image"/>
-                  <div className="card__overlay">
-                    <div className="card__header">
-                      <svg className="card__arc" xmlns="http://www.w3.org/2000/svg"><path /></svg>
-                      <div className="card__header-text">
-                        <h2 className="card__title">{game.name}</h2> 
-                        <span className="card__status">(Platform icons)</span>
-                      </div>
-                    </div>
-                    <p className="card__description">Release date: {game.released}</p>
-                    <p className='card__description'>Genres: </p>
-                    <p className='card__description'>Show more games like this</p>
-                  </div>
-              </a>
-            </li>
-          )
-        )}
-      </ul>
-      <button type="button">Add Game</button>
+      <div className="nav">
+        <h1>nav</h1>
+        <h1>nav</h1>
+        <h1>nav</h1>
+        <h1>nav</h1>
+      </div>
+
+      <div className="container">
+        <div className="pageHeader">
+          <h1 className="pageTitle">Popular Games</h1>
+        </div>
+        {/* Map over the `games` array and render a card for each game */}
+        <div className="cardGrid">
+          {(searchResults.length > 0 ? searchResults : games).map(
+            (game: Game) => (
+              <div key={game.name} className="card">
+                <h2 className="card__title">{game.name}</h2>
+                <img
+                  src={game.background_image}
+                  alt={game.name}
+                  className="card__image"
+                />
+              </div>
+            )
+          )}
+        </div>
+        {/* <button type="button">Add Game</button> */}
+      </div>
     </div>
   );
 }
