@@ -10,7 +10,6 @@ function App() {
     background_image: string;
     name: string;
     released: string;
-    platforms: string[];
   }
 
   // Initialize state variable named games and a function named setGames that can be used to update the value of games
@@ -74,6 +73,8 @@ function App() {
                       </div>
                     </div>
                     <p className="card__description">Release date: {game.released}</p>
+                    <p className='card__description'>Genres: </p>
+                    <p className='card__description'>Show more games like this</p>
                   </div>
               </a>
             </li>
