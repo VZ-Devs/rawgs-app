@@ -6,6 +6,7 @@ const apiKey = process.env.VITE_RAWG_API_KEY;
 const rawgURL = 'https://api.rawg.io';
 
 function App() {
+
   interface Game {
     background_image: string;
     name: string;
@@ -14,6 +15,7 @@ function App() {
 
   // Initialize state variable named games and a function named setGames that can be used to update the value of games
   // const [games, setGames] = useState([])
+  const [title, setTitle] = useState('Popular Games');
   const [games, setGames] = useState<Array<Game>>([]);
   const [searchResults, setSearchResults] = useState<Array<Game>>([]);
 
@@ -38,6 +40,7 @@ function App() {
   }, []);
 
   const handleSearch = (search: string) => {
+    setTitle(search);
     fetch(
       `${rawgURL}/api/games?key=${apiKey}&search=${search}&search_exact=true`
     )
@@ -58,28 +61,42 @@ function App() {
         />
       </div>
       <div className="nav">
-        <h1>nav</h1>
-        <h1>nav</h1>
-        <h1>nav</h1>
+        <h1>Home</h1>
+        <h1>All Games</h1>
         <h1>nav</h1>
       </div>
 
       <div className="container">
         <div className="pageHeader">
-          <h1 className="pageTitle">Popular Games</h1>
+          {(searchResults.length > 0 ? <h1 className="pageTitle">Search: {title}</h1> : 
+            <h1 className="pageTitle">{title}</h1>)}
         </div>
         {/* Map over the `games` array and render a card for each game */}
         <div className="cardGrid">
           {(searchResults.length > 0 ? searchResults : games).map(
             (game: Game) => (
-              <div key={game.name} className="card">
-                <h2 className="card__title">{game.name}</h2>
-                <img
-                  src={game.background_image}
-                  alt={game.name}
-                  className="card__image"
-                />
-              </div>
+                <div className="card" key={game.name}>
+                  <img
+                    src={game.background_image}
+                    alt={game.name}
+                    className="card-image"
+                  />
+                  <div className="card-content">
+                    <h2 className="card-title">{game.name}</h2>
+                    <p className="card-body">Release Date: {game.released}</p>
+                    <p className="card-body">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Fugiat rem facilis.
+                    </p>
+                    <p className="card-body">
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Fugiat rem facilis.
+                    </p>
+                    <a href="#" className="button">
+                      Show more games like this
+                    </a>
+                  </div>
+                </div>
             )
           )}
         </div>

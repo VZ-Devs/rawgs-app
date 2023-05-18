@@ -27,7 +27,7 @@ input::placeholder {
   color: rgb(255, 255, 255);
 }
 
-input:hover::placeholder {
+input:hover::placeholder{
   transition: color .5s ease-in-out;
   color: rgb(136, 136, 136);
 }
@@ -39,7 +39,14 @@ input:focus {
 .input-wrapper:hover {
   transition: background .5s ease-in-out;
   background-color: white;
-  cursor: pointer;
+  color: rgb(136, 136, 136);
+  cursor: auto;
 }
+
+#search-icon {
+  margin-right: 5px;
+}
+
+
 
 

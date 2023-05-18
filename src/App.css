@@ -1,5 +1,8 @@
-body {
+ body {
+  display: grid;
+  min-height: 100vh;
   background-color: black;
+  place-items: center;
   font-size: 14px;
   line-height: normal;
   font-weight: 400;
@@ -18,8 +21,20 @@ body {
   color: white;
 }
 
-/*
-#root {
+:root {
+  --clr-neutral-900: hsl(207, 19%, 9%);
+  --clr-neutral-100: hsl(0,0%,100%);
+  --clr-accent-400: hsl(142, 90%,61%);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+
+/* #root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -54,13 +69,10 @@ body {
   }
 }
 
-.card {
-  padding: 2em;
-}
 
 .read-the-docs {
   color: #888;
-} */
+} */ */
 
 .search-bar-container {
   width: 80%;
@@ -70,31 +82,36 @@ body {
 
 /* TESTING OUT CSS */
 
-/* .card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-  grid-gap: 20px;
-}
-*/
-
 .card {
-  background-color: #fff;
+  position: relative;
+  display: block;
+  height: 50%;  
   border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 1vh;
+  overflow: hidden;
+  text-decoration: none;
+  margin-right: 4vh;
+  background: hsl(0 0% 15% / 1);
+  transition: transform 1s ease;
+  transition: height 500ms ease;
+}
+
+.card:hover{
+  transform: scale(1.2); 
+  height:100%;
 } 
-/*
+
+
 .card__title {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 10px;
-}*/
+}
 
-.card__image {
+.card-image {
   width: 100%;
   height: auto;
   border-radius: 8px;
+  margin-bottom: 0px;
 }
 
 .App {
@@ -110,5 +127,59 @@ body {
 
 .cardGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  grid-gap: 1rem;
+  gap: 1vh;
+  padding: 0;
+  list-style-type: none;
 }
+
+.card-content {
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.card-title {
+  position: relative;
+  width: max-content;
+  word-wrap: break-all;
+  margin-top: 0px;
+}
+
+.card-title::after {
+  content: "";
+  position: absolute;
+  height: 3px;
+  background-color: var(--clr-accent-400);
+  left: -3%;
+  bottom: -4px;
+  width: calc(107%);
+  transform: scaleX(0);
+  transition: transform 500ms ease;
+  transform-origin: left; 
+}
+
+.card:hover .card-title::after {
+  transform: scaleX(1);
+}
+
+.button {
+  cursor: pointer;
+  display: inline-block;
+  text-decoration: none;
+  color: var(--clr-neutral-900);
+  background-color: var(--clr-accent-400);
+  padding: 0.5em 1.25em;
+  border-radius: 8px;
+}
+
+.card-container {
+  height: 400px;
+  overflow: hidden;
+  transition: height 0.3s ease;
+  border-radius: 8px;
+  z-index: -1;
+}
+.card-container:hover {
+  height: 100%;
+} 
