@@ -144,10 +144,15 @@
 }
 
 .card-title {
-  display: flex;
-  font-size: 18px;
+  position: relative;
+  width: max-content;
+  word-wrap: break-all;
+  margin-top: 0px;
+  color: white;
+  text-decoration-line: none;
+  font-size: 32px;
   font-weight: bold;
-  margin-bottom: 10px;
+  padding-left: 1.5rem;
 }
 
 .card-title::after {
@@ -155,7 +160,7 @@
   position: absolute;
   height: 3px;
   background-color: var(--clr-accent-400);
-  left: -1%;
+  left: 2%;
   bottom: -4px;
   width: calc(105%);
   transform: scaleX(0);
