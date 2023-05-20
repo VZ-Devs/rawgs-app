@@ -129,13 +129,16 @@ function App() {
                   alt={game.name}
                   className="card-image"
                 />
+                <div className="card-title-container">
                 <a
                     href={rawgURL + '/api/games/' + game.id + '?key=' + apiKey}
                     className="card-title"
                   >
                     {game.name}
                   </a>
+                </div>
                 <div className="card-content">
+                
                   <p className="card-body">Release Date: {game.released}</p>
                   <p className="card-body">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
