@@ -37,7 +37,7 @@ function App() {
   const [title, setTitle] = useState('New and Trending');
   const [games, setGames] = useState<Array<Game>>([]);
   const [searchResults, setSearchResults] = useState<Array<Game>>([]);
-  const [pages, setPages] = useState<PaginationInfo>([]);
+  const [pages, setPages] = useState<PaginationInfo>({"count": 0, next: "", previous: ""});
 
   // Define an async function to fetch data and update the state
   const fetchData = async () => {
@@ -50,7 +50,6 @@ function App() {
       const json = await response.json();
       // Update the state variable `games` with the fetched data
       setPages(json);
-      console.log(json);
       setGames(json.results);
     } catch (error) {
       // Log any errors that occur during the fetch
@@ -72,7 +71,6 @@ function App() {
       .then((json) => {
         setPages(json);
         setSearchResults(json.results);
-        console.log(json);
       });
   };
 
@@ -131,13 +129,13 @@ function App() {
                   alt={game.name}
                   className="card-image"
                 />
-                <div className="card-content">
-                  <a
+                <a
                     href={rawgURL + '/api/games/' + game.id + '?key=' + apiKey}
                     className="card-title"
                   >
                     {game.name}
                   </a>
+                <div className="card-content">
                   <p className="card-body">Release Date: {game.released}</p>
                   <p className="card-body">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
