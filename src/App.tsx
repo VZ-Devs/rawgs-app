@@ -2,20 +2,22 @@
 import './App.css';
 import { useEffect, useState } from 'react';
 import { SearchBar } from './components/SearchBar';
+import {
+  FontAwesomeIcon,
+  FontAwesomeIconProps,
+} from '@fortawesome/react-fontawesome';
+import { faN } from '@fortawesome/free-solid-svg-icons';
+import { faPlaystation, faSteam, faXbox } from '@fortawesome/free-brands-svg-icons';
 
 const apiKey = process.env.VITE_RAWG_API_KEY;
 const rawgURL = 'https://api.rawg.io';
 
 function Pagination(count: number, next: string, previous: string) {
   const pageList = [];
-  for(let i=1; i<=(Math.ceil(count/20)); i++) {
+  for (let i = 1; i <= Math.ceil(count / 20); i++) {
     pageList.push(<li key={i}>{i}</li>);
   }
-  return (
-    <div>
-      {pageList}
-    </div>
-  )
+  return <div>{pageList}</div>;
 }
 
 function App() {
@@ -24,6 +26,8 @@ function App() {
     name: string;
     released: string;
     id: number;
+    genres: Genre[];
+    stores: Store[];
   }
 
   interface PaginationInfo {
@@ -32,12 +36,30 @@ function App() {
     previous: string;
   }
 
+  interface Genre {
+    id: number;
+    name: string;
+    slug: string;
+  }
+
+  interface Store {
+    store: {
+      id: number;
+      name: string;
+      slug: string;
+    };
+  }
+
   // Initialize state variable named games and a function named setGames that can be used to update the value of games
   // const [games, setGames] = useState([])
   const [title, setTitle] = useState('New and Trending');
   const [games, setGames] = useState<Array<Game>>([]);
   const [searchResults, setSearchResults] = useState<Array<Game>>([]);
-  const [pages, setPages] = useState<PaginationInfo>({"count": 0, next: "", previous: ""});
+  const [pages, setPages] = useState<PaginationInfo>({
+    count: 0,
+    next: '',
+    previous: '',
+  });
 
   // Define an async function to fetch data and update the state
   const fetchData = async () => {
@@ -129,8 +151,21 @@ function App() {
                   alt={game.name}
                   className="card-image"
                 />
+                <div className="store-icon-container">
+                  {game.stores != null ? game.stores.map((store: Store) =>
+                    store.store.name === 'PlayStation Store' ? (
+                      <FontAwesomeIcon className="store-icon" key={store.store.name} icon={faPlaystation} size='lg' />
+                    ) : store.store.name === 'Steam' ? (
+                      <FontAwesomeIcon className="store-icon" key={store.store.name} icon={faSteam} size="lg" />
+                    ) : store.store.name === 'Nintendo Store' ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 22 22"><path fill="currentColor" d="M0 .6h7.1l9.85 15.9V.6H24v22.8h-7.04L7.06 7.5v15.9H0V.6"/></svg>
+                    ) : store.store.name === 'Xbox Store' ? (
+                      <FontAwesomeIcon className="store-icon" key={store.store.name} icon={faXbox} style={{color: "#ffffff",}} />
+                    ) : null
+                  ) : null}
+                </div>
                 <div className="card-title-container">
-                <a
+                  <a
                     href={rawgURL + '/api/games/' + game.id + '?key=' + apiKey}
                     className="card-title"
                   >
@@ -138,12 +173,13 @@ function App() {
                   </a>
                 </div>
                 <div className="card-content">
-                
                   <p className="card-body">Release Date: {game.released}</p>
-                  <p className="card-body">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Fugiat rem facilis.
-                  </p>
+                  <p>Genres:</p>
+                  <ul className="card-body">
+                    {game.genres.map((genre: Genre) => (
+                      <li key={genre.name}>{genre.name}</li>
+                    ))}
+                  </ul>
                   <p className="card-body">
                     Lorem ipsum dolor sit amet consectetur adipisicing elit.
                     Fugiat rem facilis.
