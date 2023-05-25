@@ -95,10 +95,6 @@
   transition: transform 1s ease, height 0.5s ease;
 }
 
-.card-image:nth-of-type(n+5), .card:nth-of-type(n+5) {
-  height:100px;
-}
-
 .card:hover{
   transform: scale(1.2); 
   height:100%;
@@ -114,7 +110,8 @@
 
 .card-image {
   width: 100%;
-  height: auto;
+  height: 200px; /* Set a specific height for all card images */
+  object-fit: cover; /* Maintain aspect ratio and cover the entire space */
   border-radius: 8px;
   margin-bottom: 0px;
 }
@@ -144,6 +141,14 @@
 .card-content {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
+}
+
+.card-content {
+  display: none; /* Hide the card content by default */
+}
+
+.card:hover .card-content {
+  display: block; /* Show the card content when the card is hovered over */
 }
 
 .card-title {
