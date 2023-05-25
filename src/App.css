@@ -109,7 +109,7 @@
   transition: transform 1s ease; 
 }
 
-.card:hover{
+.card:hover {
   transform: scale(1.1); 
   height:100%;
   z-index: 1;
@@ -258,4 +258,13 @@
   margin-top: 0.5rem;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
+}
+
+.error > h1 {
+  color: white;
+  font-size:80px;
+}
+
+.error > div {
+  margin-top: 10px;;
 }
