@@ -21,6 +21,7 @@ function Pagination(count: number, next: string, previous: string) {
 }
 
 function App() {
+  
   interface Game {
     background_image: string;
     name: string;

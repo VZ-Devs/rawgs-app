@@ -86,7 +86,7 @@
 .card {
   position: relative;
   display: block;
-  height: 50%;
+  height: 100%;
   border-radius: 8px;
   overflow: hidden;
   text-decoration: none;
@@ -130,10 +130,10 @@
 .cardGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
-  gap: 1vh;
-  padding: 0;
+  row-gap: 1.2rem;
+  padding: 0rem;
   list-style-type: none;
-  grid-gap: 0.5rem; /* Adjust this value to change the gap between the cards */
+  column-gap: 1.2rem;
   margin-top: 1rem;
 }
 
@@ -193,7 +193,7 @@
   background-color: var(--clr-accent-400);
   padding: 0.5em 1.25em;
   border-radius: 8px;
-  margin-bottom: 0px;
+  margin-bottom: 1rem;
 }
 
 .button:hover {
@@ -219,7 +219,7 @@
 }
 
 .store-icon {
-  margin-right: 0.3rem;
+  margin-right: 0.2rem;
 }
 
 .store-icon-container {
