@@ -12,51 +12,64 @@ import './Home.css';
 const apiKey = process.env.VITE_RAWG_API_KEY;
 const rawgURL = 'https://api.rawg.io';
 
-function Pagination(count: number, next: string, previous: string) {
+function Pagination(count: number) {
   const pageList = [];
   for (let i = 1; i <= Math.ceil(count / 20); i++) {
-    pageList.push(<li key={i}>{i}</li>);
+    pageList.push(i);
   }
-  return <div>{pageList}</div>;
+  return pageList;
 }
 
- interface Game {
-   background_image: string;
-   name: string;
-   released: string;
-   id: number;
-   genres: Genre[];
-   stores: Store[];
- }
+interface Game {
+  background_image: string;
+  name: string;
+  released: string;
+  id: number;
+  genres: Genre[];
+  stores: Store[];
+}
 
- interface PaginationInfo {
+interface PaginationInfo {
   count: number;
   next: string;
   previous: string;
 }
 
- interface Genre {
-   id: number;
-   name: string;
-   slug: string;
- }
+interface Genre {
+  id: number;
+  name: string;
+  slug: string;
+}
 
- interface Store {
-   store: {
-     id: number;
-     name: string;
-     slug: string;
-   };
- }
+interface Store {
+  store: {
+    id: number;
+    name: string;
+    slug: string;
+  };
+}
 
-
-function Home({title, searchResults, searchString, isSearchComplete, pages}: {title: string, searchResults: Array<Game>, searchString: string, isSearchComplete: boolean, pages:PaginationInfo}) {
- 
+function Home({
+  title,
+  searchResults,
+  searchString,
+  isSearchComplete,
+  currentUrl
+}: {
+  title: string;
+  searchResults: Array<Game>;
+  searchString: string;
+  isSearchComplete: boolean;
+  currentUrl: string
+}) {
   // Initialize state variable named games and a function named setGames that can be used to update the value of games
   // const [games, setGames] = useState([])
   const [games, setGames] = useState<Array<Game>>([]);
   const [nextPage, setNextPage] = useState('');
   const [previousPage, setPreviousPage] = useState('');
+  const [count, setCount] = useState(0);
+  const [url, setUrl] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Define an async function to fetch data and update the state
   const fetchData = async () => {
@@ -70,6 +83,10 @@ function Home({title, searchResults, searchString, isSearchComplete, pages}: {ti
       // Update the state variable `games` with the fetched data
       setGames(json.results);
       setNextPage(json.next);
+      setCount(json.count);
+      setUrl(
+        `${rawgURL}/api/games?key=${apiKey}&dates=2023-03-01,2023-05-18&platforms=18,1,7`
+      );
     } catch (error) {
       // Log any errors that occur during the fetch
       console.log('error', error);
@@ -79,18 +96,17 @@ function Home({title, searchResults, searchString, isSearchComplete, pages}: {ti
   const fetchNext = async (nextPage: string) => {
     try {
       // Make a GET request to the API endpoint
-      const response = await fetch(
-        `${nextPage}`
-      );
+      const response = await fetch(`${nextPage}`);
       // Parse the response data as JSON
       const json = await response.json();
       // Update the state variable `games` with the fetched data
       setGames(json.results);
       setNextPage(json.next);
       setPreviousPage(json.previous);
+      setCurrentPage(currentPage + 1);
       window.scrollTo({
-        top: 0, 
-        behavior: 'smooth'
+        top: 0,
+        behavior: 'smooth',
       });
     } catch (error) {
       // Log any errors that occur during the fetch
@@ -101,18 +117,38 @@ function Home({title, searchResults, searchString, isSearchComplete, pages}: {ti
   const fetchPrevious = async (previousPage: string) => {
     try {
       // Make a GET request to the API endpoint
-      const response = await fetch(
-        `${previousPage}`
-      );
+      const response = await fetch(`${previousPage}`);
       // Parse the response data as JSON
       const json = await response.json();
       // Update the state variable `games` with the fetched data
       setGames(json.results);
       setNextPage(json.next);
       setPreviousPage(json.previous);
+      setCurrentPage(currentPage - 1);
       window.scrollTo({
-        top: 0, 
-        behavior: 'smooth'
+        top: 0,
+        behavior: 'smooth',
+      });
+    } catch (error) {
+      // Log any errors that occur during the fetch
+      console.log('error', error);
+    }
+  };
+
+  const fetchPage = async (page: number) => {
+    try {
+      // Make a GET request to the API endpoint
+      const response = await fetch(`${url}` + '&page=' + page);
+      // Parse the response data as JSON
+      const json = await response.json();
+      // Update the state variable `games` with the fetched data
+      setGames(json.results);
+      setNextPage(json.next);
+      setPreviousPage(json.previous);
+      setCurrentPage(page);
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
       });
     } catch (error) {
       // Log any errors that occur during the fetch
@@ -133,13 +169,12 @@ function Home({title, searchResults, searchString, isSearchComplete, pages}: {ti
           {searchResults.length > 0 && isSearchComplete ? (
             <h1 className="pageTitle">Search: {searchString}</h1>
           ) : searchResults.length === 0 && isSearchComplete ? (
-            <div className='error'>
+            <div className="error">
               <h1>No Results: {searchString}</h1>
             </div>
           ) : (
             <h1 className="pageTitle">{title}</h1>
-          )
-          }
+          )}
         </div>
         <div className="dropDown">
           <select name="cars" id="cars">
@@ -230,8 +265,35 @@ function Home({title, searchResults, searchString, isSearchComplete, pages}: {ti
             )
           )}
         </div>
-        {nextPage && <button className='pagination-button' onClick={() => fetchNext(nextPage)}>Next</button>}
-        {previousPage && <button className='pagination-button' onClick={() => fetchPrevious(previousPage)}>Previous</button>}
+        <div className="pagination">
+          {previousPage && (
+            <button
+              className="pagination-button"
+              id="previous"
+              onClick={() => fetchPrevious(previousPage)}
+            >
+              Previous
+            </button>
+          )}
+          {Pagination(count).map((page: number) => (
+            <button
+              key={page}
+              className={page === currentPage ? 'active' : ''}
+              onClick={() => fetchPage(page)}
+            >
+              {page}
+            </button>
+          ))}
+          {nextPage && (
+            <button
+              className="pagination-button"
+              id="next"
+              onClick={() => fetchNext(nextPage)}
+            >
+              Next
+            </button>
+          )}
+        </div>
       </div>
     </div>
   );

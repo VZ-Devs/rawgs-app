@@ -19,6 +19,7 @@ function App() {
     next: '',
     previous: '',
   });
+  const [url, setUrl] = useState('');
 
   interface Game {
     background_image: string;
@@ -61,6 +62,7 @@ function App() {
         setPages(json);
         setSearchString(search);
         setIsSearchComplete(true);
+        setUrl(`${rawgURL}/api/games?key=${apiKey}&search=${search}`);
       });
   };
   
@@ -85,7 +87,7 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<Home title={title} searchResults={searchResults} searchString={searchString} isSearchComplete={isSearchComplete} pages={pages}/>}
+          element={<Home title={title} searchResults={searchResults} searchString={searchString} isSearchComplete={isSearchComplete} currentUrl={url}/>}
         />
         <Route path="/games" element={<Games />} />
         GamePage Component
