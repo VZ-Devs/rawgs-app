@@ -99,7 +99,7 @@
 
 .card:hover {
   transform: scale(1.2);
-  height: auto; /* Update this line */
+  height: auto;
   z-index: 1;
 }
 
@@ -137,9 +137,11 @@
 }
 
 .card-content {
-  padding: 1.5rem;
-  opacity: 1; /* Update this line */
-  /* transition: opacity 0.5s ease; */ /* Remove this line */
+  display: none; /* Hide the card content by default */
+}
+
+.card:hover .card-content {
+  display: block; /* Show the card content when the card is hovered over */
 }
 
 .card-title {
