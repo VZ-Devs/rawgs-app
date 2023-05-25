@@ -193,7 +193,7 @@ function App() {
             )
           )}
         </div>
-        {Pagination(pages.count, pages.next, pages.previous)}
+        {/* {Pagination(pages.count, pages.next, pages.previous)} */}
       </div>
     </div>
   );
