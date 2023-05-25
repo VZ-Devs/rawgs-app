@@ -95,6 +95,10 @@
   transition: transform 1s ease, height 0.5s ease;
 }
 
+.card-image:nth-of-type(n+5), .card:nth-of-type(n+5) {
+  height:100px;
+}
+
 .card:hover{
   transform: scale(1.2); 
   height:100%;
