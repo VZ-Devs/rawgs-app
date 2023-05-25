@@ -12,13 +12,13 @@ import './Home.css';
 const apiKey = process.env.VITE_RAWG_API_KEY;
 const rawgURL = 'https://api.rawg.io';
 
-// function Pagination(count: number, next: string, previous: string) {
-//   const pageList = [];
-//   for (let i = 1; i <= Math.ceil(count / 20); i++) {
-//     pageList.push(<li key={i}>{i}</li>);
-//   }
-//   return <div>{pageList}</div>;
-// }
+function Pagination(count: number, next: string, previous: string) {
+  const pageList = [];
+  for (let i = 1; i <= Math.ceil(count / 20); i++) {
+    pageList.push(<li key={i}>{i}</li>);
+  }
+  return <div>{pageList}</div>;
+}
 
  interface Game {
    background_image: string;
@@ -29,11 +29,11 @@ const rawgURL = 'https://api.rawg.io';
    stores: Store[];
  }
 
-//  interface PaginationInfo {
-//    count: number;
-//    next: string;
-//    previous: string;
-//  }
+ interface PaginationInfo {
+  count: number;
+  next: string;
+  previous: string;
+}
 
  interface Genre {
    id: number;
@@ -50,16 +50,13 @@ const rawgURL = 'https://api.rawg.io';
  }
 
 
-function Home({title, searchResults}: {title: string, searchResults: Array<Game>}) {
+function Home({title, searchResults, searchString, isSearchComplete, pages}: {title: string, searchResults: Array<Game>, searchString: string, isSearchComplete: boolean, pages:PaginationInfo}) {
  
   // Initialize state variable named games and a function named setGames that can be used to update the value of games
   // const [games, setGames] = useState([])
   const [games, setGames] = useState<Array<Game>>([]);
-  // const [pages, setPages] = useState<PaginationInfo>({
-  //   count: 0,
-  //   next: '',
-  //   previous: '',
-  // });
+  const [nextPage, setNextPage] = useState('');
+  const [previousPage, setPreviousPage] = useState('');
 
   // Define an async function to fetch data and update the state
   const fetchData = async () => {
@@ -71,8 +68,52 @@ function Home({title, searchResults}: {title: string, searchResults: Array<Game>
       // Parse the response data as JSON
       const json = await response.json();
       // Update the state variable `games` with the fetched data
-      // setPages(json);
       setGames(json.results);
+      setNextPage(json.next);
+    } catch (error) {
+      // Log any errors that occur during the fetch
+      console.log('error', error);
+    }
+  };
+
+  const fetchNext = async (nextPage: string) => {
+    try {
+      // Make a GET request to the API endpoint
+      const response = await fetch(
+        `${nextPage}`
+      );
+      // Parse the response data as JSON
+      const json = await response.json();
+      // Update the state variable `games` with the fetched data
+      setGames(json.results);
+      setNextPage(json.next);
+      setPreviousPage(json.previous);
+      window.scrollTo({
+        top: 0, 
+        behavior: 'smooth'
+      });
+    } catch (error) {
+      // Log any errors that occur during the fetch
+      console.log('error', error);
+    }
+  };
+
+  const fetchPrevious = async (previousPage: string) => {
+    try {
+      // Make a GET request to the API endpoint
+      const response = await fetch(
+        `${previousPage}`
+      );
+      // Parse the response data as JSON
+      const json = await response.json();
+      // Update the state variable `games` with the fetched data
+      setGames(json.results);
+      setNextPage(json.next);
+      setPreviousPage(json.previous);
+      window.scrollTo({
+        top: 0, 
+        behavior: 'smooth'
+      });
     } catch (error) {
       // Log any errors that occur during the fetch
       console.log('error', error);
@@ -89,13 +130,18 @@ function Home({title, searchResults}: {title: string, searchResults: Array<Game>
     <div>
       <div className="container">
         <div className="pageHeader">
-          {searchResults.length > 0 ? (
-            <h1 className="pageTitle">Search: {title}</h1>
+          {searchResults.length > 0 && isSearchComplete ? (
+            <h1 className="pageTitle">Search: {searchString}</h1>
+          ) : searchResults.length === 0 && isSearchComplete ? (
+            <div className='error'>
+              <h1>No Results: {searchString}</h1>
+            </div>
           ) : (
             <h1 className="pageTitle">{title}</h1>
-          )}
+          )
+          }
         </div>
-        {/* <div className="dropDown">
+        <div className="dropDown">
           <select name="cars" id="cars">
             <option value="Relevance">Relevance</option>
             <option value="Date Added">Date Added</option>
@@ -104,7 +150,7 @@ function Home({title, searchResults}: {title: string, searchResults: Array<Game>
             <option value="Popularity">Popularity</option>
             <option value="Average Rating">Average Rating</option>
           </select>
-        </div> */}
+        </div>
         {/* Map over the `games` array and render a card for each game */}
         <div className="cardGrid">
           {(searchResults.length > 0 ? searchResults : games).map(
@@ -135,6 +181,7 @@ function Home({title, searchResults}: {title: string, searchResults: Array<Game>
                         ) : store.store.name === 'Nintendo Store' ? (
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
+                            key={store.store.name}
                             width="14"
                             height="14"
                             viewBox="0 0 22 22"
@@ -183,7 +230,8 @@ function Home({title, searchResults}: {title: string, searchResults: Array<Game>
             )
           )}
         </div>
-        {/* {Pagination(pages.count, pages.next, pages.previous)} */}
+        {nextPage && <button className='pagination-button' onClick={() => fetchNext(nextPage)}>Next</button>}
+        {previousPage && <button className='pagination-button' onClick={() => fetchPrevious(previousPage)}>Previous</button>}
       </div>
     </div>
   );

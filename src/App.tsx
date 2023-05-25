@@ -12,6 +12,14 @@ const rawgURL = 'https://api.rawg.io';
 function App() {
   const [title, setTitle] = useState('New and Trending');
   const [searchResults, setSearchResults] = useState<Array<Game>>([]);
+  const [searchString, setSearchString ] = useState('');
+  const [isSearchComplete, setIsSearchComplete] = useState(false);
+  const [pages, setPages] = useState<PaginationInfo>({
+    count: 0,
+    next: '',
+    previous: '',
+  });
+
   interface Game {
     background_image: string;
     name: string;
@@ -20,11 +28,19 @@ function App() {
     genres: Genre[];
     stores: Store[];
   }
+
+  interface PaginationInfo {
+    count: number;
+    next: string;
+    previous: string;
+  }
+
   interface Genre {
     id: number;
     name: string;
     slug: string;
   }
+
   interface Store {
     store: {
       id: number;
@@ -42,6 +58,9 @@ function App() {
       .then((response) => response.json())
       .then((json) => {
         setSearchResults(json.results);
+        setPages(json);
+        setSearchString(search);
+        setIsSearchComplete(true);
       });
   };
   
@@ -66,7 +85,7 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={<Home title={title} searchResults={searchResults} />}
+          element={<Home title={title} searchResults={searchResults} searchString={searchString} isSearchComplete={isSearchComplete} pages={pages}/>}
         />
         <Route path="/games" element={<Games />} />
         GamePage Component
