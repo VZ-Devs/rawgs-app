@@ -83,7 +83,7 @@
 
 /* TESTING OUT CSS */
 
-.card {
+/* .card {
   position: relative;
   display: block;
   height: 100%;
@@ -93,6 +93,20 @@
   margin-right: 4vh;
   background: hsl(0 0% 15% / 1);
   transition: transform 1s ease, height 0.5s ease;
+} */
+
+.card {
+  flex: 0 0 auto;
+  position: relative;
+  display: block;
+  min-height: 100%;
+  width: 380px;
+  border-radius: 8px;
+  overflow: hidden;
+  text-decoration: none;
+  margin-right: 4vh;
+  background: hsl(0 0% 15% / 1);
+  transition: transform 1s ease; 
 }
 
 .card:hover{
