@@ -25,6 +25,7 @@ export const SearchBar: React.FunctionComponent<SearchBarProps> = ({ placeholder
         placeholder={placeholder}
         value={input}
         onChange={(e) => setInput(e.target.value)}
+        className="textBox"
       />
     </form>
   );

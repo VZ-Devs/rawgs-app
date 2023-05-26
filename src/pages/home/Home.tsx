@@ -1,7 +1,6 @@
 // Import necessary dependencies
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faN } from '@fortawesome/free-solid-svg-icons';
 import {
   faPlaystation,
   faSteam,
@@ -18,6 +17,17 @@ function Pagination(count: number) {
     pageList.push(i);
   }
   return pageList;
+}
+
+interface HomeProps {
+  title: string;
+  searchResults: Game[];
+  searchString: string;
+  isSearchComplete: boolean;
+  searchUrl: string;
+  next: string;
+  pageNumber: number;
+  handlePagination: () => void; // Add the handlePagination prop
 }
 
 interface Game {
@@ -54,17 +64,24 @@ function Home({
   searchResults,
   searchString,
   isSearchComplete,
-  currentUrl
+  next,
+  searchUrl,
+  pageNumber,
+  handlePagination
 }: {
   title: string;
   searchResults: Array<Game>;
   searchString: string;
   isSearchComplete: boolean;
-  currentUrl: string
+  next: string;
+  searchUrl: string;
+  pageNumber: number;
+  handlePagination: () => void; 
 }) {
   // Initialize state variable named games and a function named setGames that can be used to update the value of games
   // const [games, setGames] = useState([])
   const [games, setGames] = useState<Array<Game>>([]);
+  const [searchGames, setSearchGames] = useState<Array<Game>>([]);
   const [nextPage, setNextPage] = useState('');
   const [previousPage, setPreviousPage] = useState('');
   const [count, setCount] = useState(0);
@@ -100,6 +117,9 @@ function Home({
       // Parse the response data as JSON
       const json = await response.json();
       // Update the state variable `games` with the fetched data
+      // if(searchResults.length > 0) {
+      //   setGames
+      // }
       setGames(json.results);
       setNextPage(json.next);
       setPreviousPage(json.previous);
@@ -266,15 +286,24 @@ function Home({
           )}
         </div>
         <div className="pagination">
-          {previousPage && (
-            <button
-              className="pagination-button"
-              id="previous"
-              onClick={() => fetchPrevious(previousPage)}
-            >
-              Previous
-            </button>
-          )}
+          {previousPage &&
+            (next === '' ? (
+              <button
+                className="pagination-button"
+                id="previous"
+                onClick={() => fetchPrevious(previousPage)}
+              >
+                Previous
+              </button>
+            ) : (
+              <button
+                className="pagination-button"
+                id="previous"
+                onClick={() => fetchPrevious(previousPage)}
+              >
+                Previous
+              </button>
+            ))}
           {Pagination(count).map((page: number) => (
             <button
               key={page}
@@ -284,15 +313,24 @@ function Home({
               {page}
             </button>
           ))}
-          {nextPage && (
-            <button
-              className="pagination-button"
-              id="next"
-              onClick={() => fetchNext(nextPage)}
-            >
-              Next
-            </button>
-          )}
+          {nextPage &&
+            (next === '' ? (
+              <button
+                className="pagination-button"
+                id="next"
+                onClick={() => fetchNext(nextPage)}
+              >
+                Next
+              </button>
+            ) : (
+              <button
+                className="pagination-button"
+                id="next"
+                onClick={() => fetchNext(next)}
+              >
+                Next
+              </button>
+            ))}
         </div>
       </div>
     </div>
