@@ -5,7 +5,6 @@ import {
   faPlaystation,
   faSteam,
   faXbox,
-  faWindows,
 } from '@fortawesome/free-brands-svg-icons';
 import './Home.css';
 
@@ -18,17 +17,6 @@ function Pagination(count: number) {
     pageList.push(i);
   }
   return pageList;
-}
-
-interface HomeProps {
-  title: string;
-  searchResults: Game[];
-  searchString: string;
-  isSearchComplete: boolean;
-  searchUrl: string;
-  next: string;
-  pageNumber: number;
-  handlePagination: () => void; // Add the handlePagination prop
 }
 
 interface Game {
@@ -67,23 +55,33 @@ function Home({
   searchString,
   isSearchComplete,
   next,
+  previous,
   searchUrl,
   pageNumber,
   handlePagination,
-}: {
+  fetchNext,
+  fetchPrevious,
+  fetchPage,
+  handleHomeButton
+} : {
   title: string;
   searchResults: Array<Game>;
   searchString: string;
   isSearchComplete: boolean;
   next: string;
+  previous: string;
   searchUrl: string;
   pageNumber: number;
   handlePagination: () => void;
+  fetchNext: (nextPage:string, nextPageNumber: number) => void;
+  fetchPrevious: (previousPage:string, previousPageNumber: number) => void;
+  fetchPage: (page:number) => void;
+  handleHomeButton: () => void;
 }) {
   // Initialize state variable named games and a function named setGames that can be used to update the value of games
   // const [games, setGames] = useState([])
   const [games, setGames] = useState<Array<Game>>([]);
-  const [searchGames, setSearchGames] = useState<Array<Game>>([]);
+  // const [searchGames, setSearchGames] = useState<Array<Game>>([]);
   const [nextPage, setNextPage] = useState('');
   const [previousPage, setPreviousPage] = useState('');
   const [count, setCount] = useState(0);
@@ -112,75 +110,25 @@ function Home({
     }
   };
 
-  const fetchNext = async (nextPage: string) => {
-    try {
-      // Make a GET request to the API endpoint
-      const response = await fetch(`${nextPage}`);
-      // Parse the response data as JSON
-      const json = await response.json();
-      // Update the state variable `games` with the fetched data
-      // if(searchResults.length > 0) {
-      //   setGames
-      // }
-      setGames(json.results);
-      setNextPage(json.next);
-      setPreviousPage(json.previous);
-      setCurrentPage(currentPage + 1);
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      });
-    } catch (error) {
-      // Log any errors that occur during the fetch
-      console.log('error', error);
-    }
+  const handleNextPage = () => {
+    fetchNext(next, currentPage+1);
+    setCurrentPage(pageNumber+1);
   };
 
-  const fetchPrevious = async (previousPage: string) => {
-    try {
-      // Make a GET request to the API endpoint
-      const response = await fetch(`${previousPage}`);
-      // Parse the response data as JSON
-      const json = await response.json();
-      // Update the state variable `games` with the fetched data
-      setGames(json.results);
-      setNextPage(json.next);
-      setPreviousPage(json.previous);
-      setCurrentPage(currentPage - 1);
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      });
-    } catch (error) {
-      // Log any errors that occur during the fetch
-      console.log('error', error);
-    }
+  const handlePreviousPage = () => {
+    fetchPrevious(previous, currentPage-1);
+    setCurrentPage(pageNumber-1);
   };
 
-  const fetchPage = async (page: number) => {
-    try {
-      // Make a GET request to the API endpoint
-      const response = await fetch(`${url}` + '&page=' + page);
-      // Parse the response data as JSON
-      const json = await response.json();
-      // Update the state variable `games` with the fetched data
-      setGames(json.results);
-      setNextPage(json.next);
-      setPreviousPage(json.previous);
-      setCurrentPage(page);
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth',
-      });
-    } catch (error) {
-      // Log any errors that occur during the fetch
-      console.log('error', error);
-    }
-  };
+  const handleFetchPage = (page:number) => {
+    fetchPage(page);
+    setCurrentPage(page);
+  }
 
   // Use the `useEffect` hook to fetch data from rawg API when the component mounts
   useEffect(() => {
     fetchData();
+    setCurrentPage(1);
   }, []);
 
   // Render the component
@@ -242,20 +190,13 @@ function Home({
                             width="16"
                             height="16"
                             viewBox="0 -3 25 25"
+                            className="store-icon"
                           >
                             <path
                               fill="currentColor"
                               d="M0 .6h7.1l9.85 15.9V.6H24v22.8h-7.04L7.06 7.5v15.9H0V.6"
                             />
                           </svg>
-                        ) : store.store.name === 'Xbox Store' ? (
-                          <FontAwesomeIcon
-                            className="store-icon"
-                            key={store.store.name}
-                            icon={faXbox}
-                            style={{ color: '#ffffff' }}
-                            size="lg"
-                          />
                         ) : store.store.name === 'Xbox Store' ? (
                           <FontAwesomeIcon
                             className="store-icon"
@@ -293,12 +234,12 @@ function Home({
           )}
         </div>
         <div className="pagination">
-          {previousPage &&
+          {previous &&
             (next === '' ? (
               <button
                 className="pagination-button"
                 id="previous"
-                onClick={() => fetchPrevious(previousPage)}
+                onClick={() => handlePreviousPage()}
               >
                 Previous
               </button>
@@ -306,26 +247,26 @@ function Home({
               <button
                 className="pagination-button"
                 id="previous"
-                onClick={() => fetchPrevious(previousPage)}
+                onClick={() => handlePreviousPage()}
               >
                 Previous
               </button>
             ))}
-          {Pagination(count).map((page: number) => (
+          {!isSearchComplete ? (Pagination(count).map((page: number) => (
             <button
               key={page}
-              className={page === currentPage ? 'active' : ''}
-              onClick={() => fetchPage(page)}
+              className={page === pageNumber ? 'active' : ''}
+              onClick={() => handleFetchPage(page)}
             >
               {page}
             </button>
-          ))}
-          {nextPage &&
+          ))) : ( null )}
+          {next &&
             (next === '' ? (
               <button
                 className="pagination-button"
                 id="next"
-                onClick={() => fetchNext(nextPage)}
+                onClick={() => handleNextPage()}
               >
                 Next
               </button>
@@ -333,7 +274,7 @@ function Home({
               <button
                 className="pagination-button"
                 id="next"
-                onClick={() => fetchNext(next)}
+                onClick={() => handleNextPage()}
               >
                 Next
               </button>

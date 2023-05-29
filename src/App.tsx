@@ -9,62 +9,143 @@ import Games from './pages/home/Games';
 const apiKey = process.env.VITE_RAWG_API_KEY;
 const rawgURL = 'https://api.rawg.io';
 
+interface Game {
+  background_image: string;
+  name: string;
+  released: string;
+  id: number;
+  genres: Genre[];
+  stores: Store[];
+}
+
+interface PaginationInfo {
+  count: number;
+  next: string;
+  previous: string;
+}
+
+interface Genre {
+  id: number;
+  name: string;
+  slug: string;
+}
+
+interface Store {
+  store: {
+    id: number;
+    name: string;
+    slug: string;
+    domain: string;
+  };
+}
+
 function App() {
   const [title, setTitle] = useState('New and Trending');
   const [searchResults, setSearchResults] = useState<Array<Game>>([]);
   const [searchString, setSearchString] = useState('');
   const [isSearchComplete, setIsSearchComplete] = useState(false);
-  const [searchUrl, setUrl] = useState('');
-  const [next, setNext] = useState('');
+  const [searchUrl, setSearchUrl] = useState('');
+  const [next, setNext] = useState(
+    `${rawgURL}/api/games?key=${apiKey}&dates=2023-03-01,2023-05-31&platforms=18,1,7&page=2`
+  );
+  const [previous, setPreviousPage] = useState('');
   const [pageNumber, setPageNumber] = useState(1);
 
-  interface Game {
-    background_image: string;
-    name: string;
-    released: string;
-    id: number;
-    genres: Genre[];
-    stores: Store[];
-  }
+  const fetchNext = async (nextPage: string, nextPageNumber: number) => {
+    try {
+      setPageNumber(nextPageNumber);
+      // Make a GET request to the API endpoint
+      const response = await fetch(`${nextPage}`);
+      // Parse the response data as JSON
+      const json = await response.json();
+      // Update the state variable `searchResults` with the fetched data
+      setSearchResults(json.results);
+      setNext(json.next);
+      setSearchUrl(json.next);
+      setPreviousPage(json.previous);
+    } catch (error) {
+      // Log any errors that occur during the fetch
+      console.log('error', error);
+    }
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  };
 
-  interface PaginationInfo {
-    count: number;
-    next: string;
-    previous: string;
-  }
+  const fetchPrevious = async (
+    previousPage: string,
+    previousPageNumber: number
+  ) => {
+    try {
+      setPageNumber(previousPageNumber);
+      // Make a GET request to the API endpoint
+      const response = await fetch(`${previousPage}`);
+      // Parse the response data as JSON
+      const json = await response.json();
+      // Update the state variable `searchResults` with the fetched data
+      setSearchResults(json.results);
+      setNext(json.next);
+      setSearchUrl(json.previous);
+      setPageNumber(pageNumber - 1); // Decrement the page number for the previous page
+      console.log(pageNumber);
+      setPreviousPage(json.previous);
+      console.log('fetchPrevious');
+    } catch (error) {
+      // Log any errors that occur during the fetch
+      console.log('error', error);
+    }
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+  };
 
-  interface Genre {
-    id: number;
-    name: string;
-    slug: string;
-  }
-
-  interface Store {
-    store: {
-      id: number;
-      name: string;
-      slug: string;
-      domain: string;
-    };
-  }
+  const fetchPage = async (page: number) => {
+    try {
+      // Make a GET request to the API endpoint
+      if (searchUrl) {
+        const response = await fetch(`${searchUrl}&page=${page}`);
+        // Parse the response data as JSON
+        const json = await response.json();
+        // Update the state variable `searchResults` with the fetched data
+        setSearchResults(json.results);
+        setNext(json.next);
+        setPreviousPage(json.previous);
+        setPageNumber(page);
+        console.log(json.results);
+      } else {
+        const response = await fetch(
+          `${rawgURL}/api/games?key=${apiKey}&dates=2023-03-01,2023-05-31&platforms=18,1,7&page=${page}`
+        );
+        // Parse the response data as JSON
+        const json = await response.json();
+        // Update the state variable `searchResults` with the fetched data
+        setSearchResults(json.results);
+        setNext(json.next);
+        setPreviousPage(json.previous);
+        setPageNumber(page);
+        console.log(json.results);
+      }
+    } catch (error) {
+      // Log any errors that occur during the fetch
+      console.log('error', error);
+    }
+  };
 
   // Render the component
   const handleSearch = (search: string) => {
     setTitle(search);
     setPageNumber(1); // Reset the page number to 1 when performing a new search
-    fetch(
-      `${rawgURL}/api/games?key=${apiKey}&search=${search}&page=${pageNumber}`
-    )
+    fetch(`${rawgURL}/api/games?key=${apiKey}&search=${search}`)
       .then((response) => response.json())
       .then((json) => {
         setSearchResults(json.results);
         setSearchString(search);
         setIsSearchComplete(true);
         setNext(json.next);
-        setUrl(
+        setSearchUrl(
           `${rawgURL}/api/games?key=${apiKey}&search=${search}&page=${pageNumber}`
         );
       });
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
   };
 
   // Function to handle pagination
@@ -75,7 +156,7 @@ function App() {
         .then((json) => {
           setSearchResults(json.results);
           setNext(json.next);
-          setUrl(json.next);
+          setSearchUrl(json.next);
           setPageNumber(pageNumber + 1); // Increment the page number for the next page
         });
     }
@@ -86,9 +167,11 @@ function App() {
     setTitle('New and Trending');
     setSearchString('');
     setIsSearchComplete(false);
-    setUrl('');
+    setSearchUrl('');
     setPageNumber(1);
-    
+    setNext(
+      `${rawgURL}/api/games?key=${apiKey}&dates=2023-03-01,2023-05-31&platforms=18,1,7&page=2`
+    );
   };
 
   const handleAllGames = () => {
@@ -96,9 +179,10 @@ function App() {
     setTitle('All Games');
     setSearchString('');
     setIsSearchComplete(false);
-    setUrl('');
+    setSearchUrl('');
     setPageNumber(1);
-  }
+    setNext(`${rawgURL}/api/games?key=${apiKey}&page=2`);
+  };
 
   return (
     <div className="App">
@@ -129,8 +213,13 @@ function App() {
               isSearchComplete={isSearchComplete}
               searchUrl={searchUrl}
               next={next}
+              previous={previous}
               pageNumber={pageNumber}
               handlePagination={handlePagination}
+              fetchNext={fetchNext}
+              fetchPrevious={fetchPrevious}
+              fetchPage={fetchPage}
+              handleHomeButton={handleHomeButton}
             />
           }
         />
@@ -144,8 +233,13 @@ function App() {
               isSearchComplete={isSearchComplete}
               searchUrl={searchUrl}
               next={next}
+              previous={previous}
               pageNumber={pageNumber}
               handlePagination={handlePagination}
+              fetchNext={fetchNext}
+              fetchPrevious={fetchPrevious}
+              fetchPage={fetchPage}
+              handleAllGames={handleAllGames}
             />
           }
         />
