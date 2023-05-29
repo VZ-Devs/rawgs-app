@@ -172,6 +172,11 @@
   margin-top: 0vh;
 }
 
+.dropDown:hover {
+  color: rgb(136, 136, 136);
+  transition: color .3s ease-in-out;
+}
+
 .button {
   cursor: pointer;
   display: inline-block;

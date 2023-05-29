@@ -5,6 +5,7 @@ import {
   faPlaystation,
   faSteam,
   faXbox,
+  faWindows,
 } from '@fortawesome/free-brands-svg-icons';
 import './Home.css';
 
@@ -56,6 +57,7 @@ interface Store {
     id: number;
     name: string;
     slug: string;
+    domain: string;
   };
 }
 
@@ -67,7 +69,7 @@ function Home({
   next,
   searchUrl,
   pageNumber,
-  handlePagination
+  handlePagination,
 }: {
   title: string;
   searchResults: Array<Game>;
@@ -76,7 +78,7 @@ function Home({
   next: string;
   searchUrl: string;
   pageNumber: number;
-  handlePagination: () => void; 
+  handlePagination: () => void;
 }) {
   // Initialize state variable named games and a function named setGames that can be used to update the value of games
   // const [games, setGames] = useState([])
@@ -93,7 +95,7 @@ function Home({
     try {
       // Make a GET request to the API endpoint
       const response = await fetch(
-        `${rawgURL}/api/games?key=${apiKey}&dates=2023-03-01,2023-05-18&platforms=18,1,7`
+        `${rawgURL}/api/games?key=${apiKey}&dates=2023-03-01,2023-05-31&platforms=18,1,7`
       );
       // Parse the response data as JSON
       const json = await response.json();
@@ -102,7 +104,7 @@ function Home({
       setNextPage(json.next);
       setCount(json.count);
       setUrl(
-        `${rawgURL}/api/games?key=${apiKey}&dates=2023-03-01,2023-05-18&platforms=18,1,7`
+        `${rawgURL}/api/games?key=${apiKey}&dates=2023-03-01,2023-05-31&platforms=18,1,7`
       );
     } catch (error) {
       // Log any errors that occur during the fetch
@@ -237,9 +239,9 @@ function Home({
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
                             key={store.store.name}
-                            width="14"
-                            height="14"
-                            viewBox="0 0 22 22"
+                            width="16"
+                            height="16"
+                            viewBox="0 -3 25 25"
                           >
                             <path
                               fill="currentColor"
@@ -252,6 +254,15 @@ function Home({
                             key={store.store.name}
                             icon={faXbox}
                             style={{ color: '#ffffff' }}
+                            size="lg"
+                          />
+                        ) : store.store.name === 'Xbox Store' ? (
+                          <FontAwesomeIcon
+                            className="store-icon"
+                            key={store.store.name}
+                            icon={faXbox}
+                            style={{ color: '#ffffff' }}
+                            size="lg"
                           />
                         ) : null
                       )
@@ -273,10 +284,6 @@ function Home({
                       <li key={genre.name}>{genre.name}</li>
                     ))}
                   </ul>
-                  <p className="card-body">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Fugiat rem facilis.
-                  </p>
                   <a href="#" className="button">
                     Show more games like this
                   </a>

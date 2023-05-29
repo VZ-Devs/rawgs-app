@@ -5,6 +5,7 @@ import {
   faPlaystation,
   faSteam,
   faXbox,
+  faWindows
 } from '@fortawesome/free-brands-svg-icons';
 import './Home.css';
 
@@ -254,9 +255,11 @@ function Games({
                             key={store.store.name}
                             icon={faXbox}
                             style={{ color: '#ffffff' }}
+                            size="lg"
                           />
-                        ) : null
-                      )
+                        ) : store.store.name === 'Xbox Store' ? (
+                          <FontAwesomeIcon icon={faWindows} size="lg" style={{color: "#ffffff",}} />
+                      ) : null )
                     : null}
                 </div>
                 <div className="card-title-container">
@@ -275,10 +278,6 @@ function Games({
                       <li key={genre.name}>{genre.name}</li>
                     ))}
                   </ul>
-                  <p className="card-body">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Fugiat rem facilis.
-                  </p>
                   <a href="#" className="button">
                     Show more games like this
                   </a>

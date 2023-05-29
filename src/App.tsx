@@ -44,6 +44,7 @@ function App() {
       id: number;
       name: string;
       slug: string;
+      domain: string;
     };
   }
 
@@ -80,6 +81,25 @@ function App() {
     }
   };
 
+  const handleHomeButton = () => {
+    setSearchResults([]); // Set searchResults to an empty array
+    setTitle('New and Trending');
+    setSearchString('');
+    setIsSearchComplete(false);
+    setUrl('');
+    setPageNumber(1);
+    
+  };
+
+  const handleAllGames = () => {
+    setSearchResults([]); // Set searchResults to an empty array
+    setTitle('All Games');
+    setSearchString('');
+    setIsSearchComplete(false);
+    setUrl('');
+    setPageNumber(1);
+  }
+
   return (
     <div className="App">
       <div className="logo">logo</div>
@@ -90,11 +110,11 @@ function App() {
         />
       </div>
       <nav className="navBar">
-        <Link to="/" className="navButton">
+        <Link to="/" className="navButton" onClick={handleHomeButton}>
           Home
         </Link>
         <br />
-        <Link to="/games" className="navButton">
+        <Link to="/games" className="navButton" onClick={handleAllGames}>
           All Games
         </Link>
       </nav>
