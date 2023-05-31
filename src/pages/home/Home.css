@@ -78,7 +78,7 @@
   text-decoration: none;
   margin-right: 4vh;
   background: hsl(0 0% 15% / 1);
-  transition: transform 1s ease; 
+  transition: transform 1s ease-in-out; 
 }
 
 .card:hover {
@@ -172,6 +172,11 @@
   margin-top: 0vh;
 }
 
+.dropDown:hover {
+  color: rgb(136, 136, 136);
+  transition: color .3s ease-in-out;
+}
+
 .button {
   cursor: pointer;
   display: inline-block;
@@ -213,4 +218,41 @@
   margin-top: 0.5rem;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
+}
+
+.pagination {
+  display: flex;
+  margin-top: 10vh;
+  justify-content: center;
+}
+
+button {
+  border: 1px solid #ccc;
+  background-color: #333;
+  color: #f5f5f5;
+  padding: 5px 10px;
+  margin: 0 5px;
+  cursor: pointer;
+  border-radius: 8px;
+  font-weight: bold;
+  transition: transform 200ms ease-in-out;
+}
+
+button:hover {
+  transform: scale(1.1); 
+  height:100%;
+  z-index: 1;
+}
+
+button.active {
+  background-color: var(--clr-accent-400);
+  color: black;
+}
+
+#previous {
+  margin-right: 5vh;
+}
+
+#next {
+  margin-left: 5vh;
 }

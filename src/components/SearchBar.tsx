@@ -17,6 +17,10 @@ export const SearchBar: React.FunctionComponent<SearchBarProps> = ({ placeholder
     onSearch(input);
   };
 
+  const handleClearInput = () => {
+    setInput(''); // Clear the input state
+  };
+
   return (
     <form onSubmit={handleFormSubmit} className="input-wrapper">
       <FaSearch id="search-icon" />
@@ -25,7 +29,11 @@ export const SearchBar: React.FunctionComponent<SearchBarProps> = ({ placeholder
         placeholder={placeholder}
         value={input}
         onChange={(e) => setInput(e.target.value)}
+        className="textBox"
       />
+      <button type="button" onClick={handleClearInput}>
+        Clear
+      </button>
     </form>
   );
 };

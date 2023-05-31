@@ -1,7 +1,6 @@
 // Import necessary dependencies
 import { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faN } from '@fortawesome/free-solid-svg-icons';
 import {
   faPlaystation,
   faSteam,
@@ -12,76 +11,121 @@ import './Home.css';
 const apiKey = process.env.VITE_RAWG_API_KEY;
 const rawgURL = 'https://api.rawg.io';
 
-// function Pagination(count: number, next: string, previous: string) {
-//   const pageList = [];
-//   for (let i = 1; i <= Math.ceil(count / 20); i++) {
-//     pageList.push(<li key={i}>{i}</li>);
-//   }
-//   return <div>{pageList}</div>;
+function Pagination(count: number) {
+  const pageList = [];
+  for (let i = 1; i <= Math.ceil(count / 20); i++) {
+    pageList.push(i);
+  }
+  return pageList;
+}
+
+interface Game {
+  background_image: string;
+  name: string;
+  released: string;
+  id: number;
+  genres: Genre[];
+  stores: Store[];
+}
+
+// interface PaginationInfo {
+//   count: number;
+//   next: string;
+//   previous: string;
 // }
 
- interface Game {
-   background_image: string;
-   name: string;
-   released: string;
-   id: number;
-   genres: Genre[];
-   stores: Store[];
- }
+interface Genre {
+  id: number;
+  name: string;
+  slug: string;
+}
 
-//  interface PaginationInfo {
-//    count: number;
-//    next: string;
-//    previous: string;
-//  }
+interface Store {
+  store: {
+    id: number;
+    name: string;
+    slug: string;
+    domain: string;
+  };
+}
 
- interface Genre {
-   id: number;
-   name: string;
-   slug: string;
- }
-
- interface Store {
-   store: {
-     id: number;
-     name: string;
-     slug: string;
-   };
- }
-
-
-function Home({title, searchResults}: {title: string, searchResults: Array<Game>}) {
- 
+function Home({
+  title,
+  searchResults,
+  searchString,
+  isSearchComplete,
+  next,
+  previous,
+  pageNumber,
+  fetchNext,
+  fetchPrevious,
+  fetchPage,
+} : {
+  title: string;
+  searchResults: Array<Game>;
+  searchString: string;
+  isSearchComplete: boolean;
+  next: string;
+  previous: string;
+  searchUrl: string;
+  pageNumber: number;
+  handlePagination: () => void;
+  fetchNext: (nextPage:string, nextPageNumber: number) => void;
+  fetchPrevious: (previousPage:string, previousPageNumber: number) => void;
+  fetchPage: (page:number) => void;
+  handleHomeButton: () => void;
+}) {
   // Initialize state variable named games and a function named setGames that can be used to update the value of games
   // const [games, setGames] = useState([])
   const [games, setGames] = useState<Array<Game>>([]);
-  // const [pages, setPages] = useState<PaginationInfo>({
-  //   count: 0,
-  //   next: '',
-  //   previous: '',
-  // });
+  // const [searchGames, setSearchGames] = useState<Array<Game>>([]);
+  // const [nextPage, setNextPage] = useState('');
+  // const [previousPage, setPreviousPage] = useState('');
+  const [count, setCount] = useState(0);
+  // const [url, setUrl] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Define an async function to fetch data and update the state
   const fetchData = async () => {
     try {
       // Make a GET request to the API endpoint
       const response = await fetch(
-        `${rawgURL}/api/games?key=${apiKey}&dates=2023-03-01,2023-05-18&platforms=18,1,7`
+        `${rawgURL}/api/games?key=${apiKey}&dates=2023-03-01,2023-05-31&platforms=18,1,7`
       );
       // Parse the response data as JSON
       const json = await response.json();
       // Update the state variable `games` with the fetched data
-      // setPages(json);
       setGames(json.results);
+      // setNextPage(json.next);
+      setCount(json.count);
+      // setUrl(
+      //   `${rawgURL}/api/games?key=${apiKey}&dates=2023-03-01,2023-05-31&platforms=18,1,7`
+      // );
     } catch (error) {
       // Log any errors that occur during the fetch
       console.log('error', error);
     }
   };
 
+  const handleNextPage = () => {
+    fetchNext(next, currentPage+1);
+    setCurrentPage(pageNumber+1);
+  };
+
+  const handlePreviousPage = () => {
+    fetchPrevious(previous, currentPage-1);
+    setCurrentPage(pageNumber-1);
+  };
+
+  const handleFetchPage = (page:number) => {
+    fetchPage(page);
+    setCurrentPage(page);
+  }
+
   // Use the `useEffect` hook to fetch data from rawg API when the component mounts
   useEffect(() => {
     fetchData();
+    setCurrentPage(1);
   }, []);
 
   // Render the component
@@ -89,13 +133,17 @@ function Home({title, searchResults}: {title: string, searchResults: Array<Game>
     <div>
       <div className="container">
         <div className="pageHeader">
-          {searchResults.length > 0 ? (
-            <h1 className="pageTitle">Search: {title}</h1>
+          {searchResults.length > 0 && isSearchComplete ? (
+            <h1 className="pageTitle">Search: {searchString}</h1>
+          ) : searchResults.length === 0 && isSearchComplete ? (
+            <div className="error">
+              <h1>No Results: {searchString}</h1>
+            </div>
           ) : (
             <h1 className="pageTitle">{title}</h1>
           )}
         </div>
-        {/* <div className="dropDown">
+        <div className="dropDown">
           <select name="cars" id="cars">
             <option value="Relevance">Relevance</option>
             <option value="Date Added">Date Added</option>
@@ -104,7 +152,7 @@ function Home({title, searchResults}: {title: string, searchResults: Array<Game>
             <option value="Popularity">Popularity</option>
             <option value="Average Rating">Average Rating</option>
           </select>
-        </div> */}
+        </div>
         {/* Map over the `games` array and render a card for each game */}
         <div className="cardGrid">
           {(searchResults.length > 0 ? searchResults : games).map(
@@ -135,9 +183,11 @@ function Home({title, searchResults}: {title: string, searchResults: Array<Game>
                         ) : store.store.name === 'Nintendo Store' ? (
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
-                            width="14"
-                            height="14"
-                            viewBox="0 0 22 22"
+                            key={store.store.name}
+                            width="16"
+                            height="16"
+                            viewBox="0 -3 25 25"
+                            className="store-icon"
                           >
                             <path
                               fill="currentColor"
@@ -150,6 +200,7 @@ function Home({title, searchResults}: {title: string, searchResults: Array<Game>
                             key={store.store.name}
                             icon={faXbox}
                             style={{ color: '#ffffff' }}
+                            size="lg"
                           />
                         ) : null
                       )
@@ -171,11 +222,7 @@ function Home({title, searchResults}: {title: string, searchResults: Array<Game>
                       <li key={genre.name}>{genre.name}</li>
                     ))}
                   </ul>
-                  <p className="card-body">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Fugiat rem facilis.
-                  </p>
-                  <a href="#" className="button">
+                  <a href="google.com" className="button">
                     Show more games like this
                   </a>
                 </div>
@@ -183,7 +230,53 @@ function Home({title, searchResults}: {title: string, searchResults: Array<Game>
             )
           )}
         </div>
-        {/* {Pagination(pages.count, pages.next, pages.previous)} */}
+        <div className="pagination">
+          {previous &&
+            (next === '' ? (
+              <button
+                className="pagination-button"
+                id="previous"
+                onClick={() => handlePreviousPage()}
+              >
+                Previous
+              </button>
+            ) : (
+              <button
+                className="pagination-button"
+                id="previous"
+                onClick={() => handlePreviousPage()}
+              >
+                Previous
+              </button>
+            ))}
+          {!isSearchComplete ? (Pagination(count).map((page: number) => (
+            <button
+              key={page}
+              className={page === pageNumber ? 'active' : ''}
+              onClick={() => handleFetchPage(page)}
+            >
+              {page}
+            </button>
+          ))) : ( null )}
+          {next &&
+            (next === '' ? (
+              <button
+                className="pagination-button"
+                id="next"
+                onClick={() => handleNextPage()}
+              >
+                Next
+              </button>
+            ) : (
+              <button
+                className="pagination-button"
+                id="next"
+                onClick={() => handleNextPage()}
+              >
+                Next
+              </button>
+            ))}
+        </div>
       </div>
     </div>
   );

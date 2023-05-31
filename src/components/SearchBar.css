@@ -47,6 +47,14 @@ input:focus {
   margin-right: 5px;
 }
 
+.textBox {
+  color: white;
+}
+
+.textBox:hover {
+  color:black;
+}
+
 
 
 
