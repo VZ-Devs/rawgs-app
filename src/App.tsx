@@ -122,6 +122,8 @@ function App() {
         setPreviousPage(json.previous);
         setPageNumber(page);
         console.log(json.results);
+        document.body.scrollTop = 0; // For Safari
+        document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
       }
     } catch (error) {
       // Log any errors that occur during the fetch
