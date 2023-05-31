@@ -11,13 +11,13 @@ import './Home.css';
 const apiKey = process.env.VITE_RAWG_API_KEY;
 const rawgURL = 'https://api.rawg.io';
 
-function Pagination(count: number) {
-  const pageList = [];
-  for (let i = 1; i <= Math.ceil(count / 20); i++) {
-    pageList.push(i);
-  }
-  return pageList;
-}
+// function Pagination(count: number) {
+//   const pageList = [];
+//   for (let i = 1; i <= Math.ceil(count / 20); i++) {
+//     pageList.push(i);
+//   }
+//   return pageList;
+// }
 
 interface Game {
   background_image: string;
@@ -28,11 +28,11 @@ interface Game {
   stores: Store[];
 }
 
-interface PaginationInfo {
-  count: number;
-  next: string;
-  previous: string;
-}
+// interface PaginationInfo {
+//   count: number;
+//   next: string;
+//   previous: string;
+// }
 
 interface Genre {
   id: number;
@@ -56,13 +56,10 @@ function Games({
   isSearchComplete,
   next,
   previous,
-  searchUrl,
   pageNumber,
-  handlePagination,
   fetchNext,
   fetchPrevious,
-  fetchPage,
-  handleAllGames
+  fetchPage
 } : {
   title: string;
   searchResults: Array<Game>;
@@ -82,10 +79,10 @@ function Games({
   // const [games, setGames] = useState([])
   const [games, setGames] = useState<Array<Game>>([]);
   // const [searchGames, setSearchGames] = useState<Array<Game>>([]);
-  const [nextPage, setNextPage] = useState('');
-  const [previousPage, setPreviousPage] = useState('');
-  const [count, setCount] = useState(0);
-  const [url, setUrl] = useState('');
+  // const [nextPage, setNextPage] = useState('');
+  // const [previousPage, setPreviousPage] = useState('');
+  // const [count, setCount] = useState(0);
+  // const [url, setUrl] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
   // Define an async function to fetch data and update the state
@@ -99,11 +96,11 @@ function Games({
       const json = await response.json();
       // Update the state variable `games` with the fetched data
       setGames(json.results);
-      setNextPage(json.next);
-      setCount(json.count);
-      setUrl(
-        `${rawgURL}/api/games?key=${apiKey}`
-      );
+      // setNextPage(json.next);
+      // setCount(json.count);
+      // setUrl(
+      //   `${rawgURL}/api/games?key=${apiKey}`
+      // );
     } catch (error) {
       // Log any errors that occur during the fetch
       console.log('error', error);
@@ -120,10 +117,10 @@ function Games({
     setCurrentPage(pageNumber-1);
   };
 
-  const handleFetchPage = (page:number) => {
-    fetchPage(page);
-    setCurrentPage(page);
-  }
+  // const handleFetchPage = (page:number) => {
+  //   fetchPage(page);
+  //   setCurrentPage(page);
+  // }
 
   // Use the `useEffect` hook to fetch data from rawg API when the component mounts
   useEffect(() => {
@@ -225,7 +222,7 @@ function Games({
                       <li key={genre.name}>{genre.name}</li>
                     ))}
                   </ul>
-                  <a href="#" className="button">
+                  <a href="google.com" className="button">
                     Show more games like this
                   </a>
                 </div>

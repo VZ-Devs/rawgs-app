@@ -28,11 +28,11 @@ interface Game {
   stores: Store[];
 }
 
-interface PaginationInfo {
-  count: number;
-  next: string;
-  previous: string;
-}
+// interface PaginationInfo {
+//   count: number;
+//   next: string;
+//   previous: string;
+// }
 
 interface Genre {
   id: number;
@@ -56,13 +56,10 @@ function Home({
   isSearchComplete,
   next,
   previous,
-  searchUrl,
   pageNumber,
-  handlePagination,
   fetchNext,
   fetchPrevious,
   fetchPage,
-  handleHomeButton
 } : {
   title: string;
   searchResults: Array<Game>;
@@ -82,10 +79,10 @@ function Home({
   // const [games, setGames] = useState([])
   const [games, setGames] = useState<Array<Game>>([]);
   // const [searchGames, setSearchGames] = useState<Array<Game>>([]);
-  const [nextPage, setNextPage] = useState('');
-  const [previousPage, setPreviousPage] = useState('');
+  // const [nextPage, setNextPage] = useState('');
+  // const [previousPage, setPreviousPage] = useState('');
   const [count, setCount] = useState(0);
-  const [url, setUrl] = useState('');
+  // const [url, setUrl] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
 
   // Define an async function to fetch data and update the state
@@ -99,11 +96,11 @@ function Home({
       const json = await response.json();
       // Update the state variable `games` with the fetched data
       setGames(json.results);
-      setNextPage(json.next);
+      // setNextPage(json.next);
       setCount(json.count);
-      setUrl(
-        `${rawgURL}/api/games?key=${apiKey}&dates=2023-03-01,2023-05-31&platforms=18,1,7`
-      );
+      // setUrl(
+      //   `${rawgURL}/api/games?key=${apiKey}&dates=2023-03-01,2023-05-31&platforms=18,1,7`
+      // );
     } catch (error) {
       // Log any errors that occur during the fetch
       console.log('error', error);
@@ -225,7 +222,7 @@ function Home({
                       <li key={genre.name}>{genre.name}</li>
                     ))}
                   </ul>
-                  <a href="#" className="button">
+                  <a href="google.com" className="button">
                     Show more games like this
                   </a>
                 </div>

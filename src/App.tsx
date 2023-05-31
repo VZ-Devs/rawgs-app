@@ -18,11 +18,11 @@ interface Game {
   stores: Store[];
 }
 
-interface PaginationInfo {
-  count: number;
-  next: string;
-  previous: string;
-}
+// interface PaginationInfo {
+//   count: number;
+//   next: string;
+//   previous: string;
+// }
 
 interface Genre {
   id: number;
@@ -188,7 +188,7 @@ function App() {
 
   return (
     <div className="App">
-      <div className="logo">logo</div>
+      <div className="logo"></div>
       <div className="search-bar-container">
         <SearchBar
           placeholder="Search through RAWG database"
