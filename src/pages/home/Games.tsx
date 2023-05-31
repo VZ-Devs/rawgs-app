@@ -59,7 +59,6 @@ function Games({
   pageNumber,
   fetchNext,
   fetchPrevious,
-  fetchPage
 } : {
   title: string;
   searchResults: Array<Game>;
@@ -72,7 +71,6 @@ function Games({
   handlePagination: () => void;
   fetchNext: (nextPage:string, nextPageNumber: number) => void;
   fetchPrevious: (previousPage:string, previousPageNumber: number) => void;
-  fetchPage: (page:number) => void;
   handleAllGames: () => void;
 }) {
   // Initialize state variable named games and a function named setGames that can be used to update the value of games

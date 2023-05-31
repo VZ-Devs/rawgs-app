@@ -240,7 +240,6 @@ function App() {
               handlePagination={handlePagination}
               fetchNext={fetchNext}
               fetchPrevious={fetchPrevious}
-              fetchPage={fetchPage}
               handleAllGames={handleAllGames}
             />
           }
