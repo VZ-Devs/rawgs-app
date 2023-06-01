@@ -13,10 +13,10 @@ A video game discovery platform that allows users to view information about popu
 ## Installation
 
 You have two choices to run this app:
-- 1. using npm
+- 1. using pnpm
 - 2. using Docker
 
-#### Using npm
+#### Using pnpm
 
 - Run command: git clone https://github.com/VZ-Devs/rawgs-app.git
 - Request an API key from https://rawg.io/apidocs (requires signup)
